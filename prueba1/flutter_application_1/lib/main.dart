@@ -124,10 +124,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               ClipRRect(
-                borderRadius: BorderRadius.circular(15.0),
+                borderRadius: BorderRadius.circular(50),
                 child: Image.network(
                   "https://cataas.com/cat/says/Flutter%20me%20encanta!",
-                  height: 50,
+                  height: 200,
                 ),
               ),
               const SizedBox(height: 10),
