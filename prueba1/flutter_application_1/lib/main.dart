@@ -111,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 alignment: Alignment.center,
                 children: [
                   Container(width: 200, height: 200, color: Colors.purple),
-                  const Icon(Icons.add_to_home_screen_rounded, size: 200, color: Colors.white),
+                  const Icon(Icons.local_activity_rounded, size: 200, color: Colors.white),
                 ],
               ),
               const Padding(
