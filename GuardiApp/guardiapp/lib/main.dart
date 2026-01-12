@@ -75,6 +75,10 @@ class _MainAppState extends State<MainApp> {
                         : (user.genero == 'female'
                             ? Colors.pink.shade50
                             : Colors.white),
+                    leading: user.imagenPerfil != null
+                        ? CircleAvatar(
+                            backgroundImage: NetworkImage(user.imagenPerfil!))
+                        : const CircleAvatar(child: Icon(Icons.person)),
                     title: Text(user.nombre),
                     subtitle: Text('${user.email}\n${user.numeroTelefono ?? ''}'),
                     isThreeLine: true,
