@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:guardiapp/providers/teacher_provider.dart';
 import 'package:guardiapp/providers/absence_provider.dart';
 import 'package:guardiapp/providers/schedule_provider.dart';
+import 'package:guardiapp/providers/calendar_provider.dart';
 import 'package:guardiapp/screens/home_screen.dart';
 
 void main() {
@@ -12,6 +13,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => ProfesoresProvider()),
         ChangeNotifierProvider(create: (_) => AusenciasProvider()),
         ChangeNotifierProvider(create: (_) => HorarioProvider()),
+        ChangeNotifierProvider(create: (_) => CalendarioProvider()),
       ],
       child: const MainApp(),
     ),
