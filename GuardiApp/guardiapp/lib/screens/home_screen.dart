@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:guardiapp/screens/teacher_screen.dart';
+import 'package:guardiapp/screens/absence_screen.dart';
 
 class PantallaInicio extends StatelessWidget {
   const PantallaInicio({super.key});
@@ -22,8 +24,9 @@ class PantallaInicio extends StatelessWidget {
             icono: Icons.people,
             color: Colors.teal,
             alPresionar: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Gestión de Profesores (Próximamente)')),
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PantallaProfesores()),
               );
             },
           ),
@@ -32,8 +35,9 @@ class PantallaInicio extends StatelessWidget {
             icono: Icons.person_off,
             color: Colors.redAccent,
             alPresionar: () {
-               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Gestión de Ausencias (Próximamente)')),
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PantallaAusencias()),
               );
             },
           ),

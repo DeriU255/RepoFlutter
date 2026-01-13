@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:guardiapp/providers/teacher_provider.dart';
+import 'package:guardiapp/providers/absence_provider.dart';
 import 'package:guardiapp/screens/home_screen.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ProfesoresProvider()),
+        ChangeNotifierProvider(create: (_) => AusenciasProvider()),
+      ],
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
