@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:guardiapp/providers/absence_provider.dart';
 import 'package:guardiapp/models/absence_model.dart';
+import 'package:guardiapp/screens/create_absence_screen.dart';
 
 class PantallaAusencias extends StatelessWidget {
   const PantallaAusencias({super.key});
@@ -57,9 +58,11 @@ class PantallaAusencias extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Futuro: Navegar a pantalla de creación
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Crear ausencia: Próximamente')),
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const PantallaCrearAusencia(),
+            ),
           );
         },
         backgroundColor: Colors.redAccent,
