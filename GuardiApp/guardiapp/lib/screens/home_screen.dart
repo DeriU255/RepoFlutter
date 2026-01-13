@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guardiapp/screens/teacher_screen.dart';
 import 'package:guardiapp/screens/absence_screen.dart';
+import 'package:guardiapp/screens/schedule_screen.dart';
 
 class PantallaInicio extends StatelessWidget {
   const PantallaInicio({super.key});
@@ -46,8 +47,9 @@ class PantallaInicio extends StatelessWidget {
             icono: Icons.schedule,
             color: Colors.blueAccent,
             alPresionar: () {
-               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Horarios (Próximamente)')),
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PantallaHorario()),
               );
             },
           ),
