@@ -137,7 +137,7 @@ class _PantallaCalendarioState extends State<PantallaCalendario> {
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<TipoEvento>(
-                  value: tipoSeleccionado,
+                  initialValue: tipoSeleccionado,
                   decoration: const InputDecoration(
                     labelText: 'Tipo',
                     border: OutlineInputBorder(),

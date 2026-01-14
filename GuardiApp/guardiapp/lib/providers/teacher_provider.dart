@@ -16,6 +16,7 @@ class ProfesoresProvider extends ChangeNotifier {
 
   Future<void> cargarProfesores() async {
     if (_cargando) return;
+    if (_profesores.isNotEmpty) return;
     
     _cargando = true;
     notifyListeners();

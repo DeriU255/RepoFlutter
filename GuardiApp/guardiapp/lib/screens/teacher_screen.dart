@@ -43,13 +43,6 @@ class PantallaProfesores extends StatelessWidget {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Provider.of<ProfesoresProvider>(context, listen: false).cargarProfesores();
-        },
-        backgroundColor: Colors.teal,
-        child: const Icon(Icons.refresh, color: Colors.white),
-      ),
     );
   }
 }
