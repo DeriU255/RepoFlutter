@@ -35,7 +35,42 @@ class PantallaProfesores extends StatelessWidget {
                 trailing: IconButton(
                   icon: const Icon(Icons.info_outline),
                   onPressed: () {
-                    // Detalle del profesor
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('${profe.nombre} ${profe.apellido}'),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (profe.imagenPerfil != null)
+                              CircleAvatar(
+                                radius: 40,
+                                backgroundImage: NetworkImage(profe.imagenPerfil!),
+                              ),
+                            const SizedBox(height: 16),
+                            Text('Asignatura: ${profe.asignatura}', 
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                            const SizedBox(height: 8),
+                            const Divider(),
+                            ListTile(
+                              leading: const Icon(Icons.email),
+                              title: Text(profe.email),
+                            ),
+                            if (profe.numeroTelefono != null)
+                              ListTile(
+                                leading: const Icon(Icons.phone),
+                                title: Text(profe.numeroTelefono!),
+                              ),
+                          ],
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('Cerrar'),
+                          ),
+                        ],
+                      ),
+                    );
                   },
                 ),
               );
