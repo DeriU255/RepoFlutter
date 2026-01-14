@@ -16,7 +16,7 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
-  int _counter = 0;
+  final int _counter = 0;
   List<User>? users; // Nullable para evitar problemas de hot-reload
 
   @override

@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:guardiapp/models/teacher_model.dart';
 
 class ProfesoresProvider extends ChangeNotifier {
-  List<Profesor> _profesores = [];
+  final List<Profesor> _profesores = [];
   bool _cargando = false;
 
   List<Profesor> get profesores => _profesores;

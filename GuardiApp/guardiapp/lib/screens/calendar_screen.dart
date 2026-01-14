@@ -15,14 +15,15 @@ class PantallaCalendario extends StatefulWidget {
 class _PantallaCalendarioState extends State<PantallaCalendario> {
   DateTime _diaSeleccionado = DateTime.now();
   DateTime _diaEnFoco = DateTime.now();
-  CalendarFormat _formatoCalendario = CalendarFormat.month;
+  // 1. CAMBIO: Forzamos el formato a SEMANA para estilo planning
+  final CalendarFormat _formatoCalendario = CalendarFormat.week;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Calendario Escolar'),
-        backgroundColor: Colors.orange,
+        title: const Text('Agenda Escolar'), // Nombre más técnico
+        backgroundColor: Colors.indigo, // Color corporativo/serio
         foregroundColor: Colors.white,
       ),
       body: Column(
@@ -35,6 +36,7 @@ class _PantallaCalendarioState extends State<PantallaCalendario> {
                 lastDay: DateTime.utc(2030, 3, 14),
                 focusedDay: _diaEnFoco,
                 calendarFormat: _formatoCalendario,
+                // 2. CAMBIO: Eliminamos onFormatChanged para bloquear la vista
                 selectedDayPredicate: (day) {
                   return isSameDay(_diaSeleccionado, day);
                 },
@@ -42,11 +44,6 @@ class _PantallaCalendarioState extends State<PantallaCalendario> {
                   setState(() {
                     _diaSeleccionado = selectedDay;
                     _diaEnFoco = focusedDay;
-                  });
-                },
-                onFormatChanged: (format) {
-                  setState(() {
-                    _formatoCalendario = format;
                   });
                 },
                 onPageChanged: (focusedDay) {
@@ -57,22 +54,24 @@ class _PantallaCalendarioState extends State<PantallaCalendario> {
                 },
                 calendarStyle: const CalendarStyle(
                   markersMaxCount: 1,
+                  // 3. CAMBIO: Estilos azules (Indigo) en lugar de naranja
                   markerDecoration: BoxDecoration(
-                    color: Colors.orange,
+                    color: Colors.indigo,
                     shape: BoxShape.circle,
                   ),
                   todayDecoration: BoxDecoration(
-                    color: Colors.orangeAccent,
+                    color: Colors.indigoAccent,
                     shape: BoxShape.circle,
                   ),
                   selectedDecoration: BoxDecoration(
-                    color: Colors.deepOrange,
+                    color: Colors.indigo,
                     shape: BoxShape.circle,
                   ),
                 ),
                 headerStyle: const HeaderStyle(
                   formatButtonVisible: false,
                   titleCentered: true,
+                  titleTextStyle: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.indigo),
                 ),
               );
             },
@@ -122,7 +121,7 @@ class _PantallaCalendarioState extends State<PantallaCalendario> {
         onPressed: () {
           _mostrarDialogoAgregarEvento(context);
         },
-        backgroundColor: Colors.orange,
+        backgroundColor: Colors.indigo,
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );
@@ -131,13 +130,13 @@ class _PantallaCalendarioState extends State<PantallaCalendario> {
   Icon _getIconoTipo(TipoEvento tipo) {
     switch (tipo) {
       case TipoEvento.examen:
-        return const Icon(Icons.assignment, color: Colors.red);
+        return const Icon(Icons.assignment, color: Colors.deepPurple);
       case TipoEvento.reunion:
-        return const Icon(Icons.groups, color: Colors.blue);
+        return const Icon(Icons.groups, color: Colors.indigo);
       case TipoEvento.festivo:
-        return const Icon(Icons.celebration, color: Colors.green);
+        return const Icon(Icons.celebration, color: Colors.pink);
       case TipoEvento.tarea:
-        return const Icon(Icons.task, color: Colors.orange);
+        return const Icon(Icons.task, color: Colors.teal);
     }
   }
 

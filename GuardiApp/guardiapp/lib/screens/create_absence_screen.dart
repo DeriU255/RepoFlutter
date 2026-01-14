@@ -125,7 +125,7 @@ class _PantallaCrearAusenciaState extends State<PantallaCrearAusencia> {
                   icon: Icon(Icons.person),
                   border: OutlineInputBorder(),
                 ),
-                value: _profesorSeleccionado,
+                initialValue: _profesorSeleccionado,
                 items: listaProfesores.map((Profesor profe) {
                   return DropdownMenuItem<Profesor>(
                     value: profe,
