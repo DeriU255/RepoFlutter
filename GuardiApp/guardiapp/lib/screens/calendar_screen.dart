@@ -241,7 +241,7 @@ class _EventoCard extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -275,7 +275,7 @@ class _EventoCard extends StatelessWidget {
                       DateFormat('a').format(evento.fecha),
                       style: TextStyle(
                         fontSize: 12,
-                        color: primaryColor.withOpacity(0.8),
+                        color: primaryColor.withValues(alpha: 0.8),
                       ),
                     ),
                   ],
@@ -309,7 +309,7 @@ class _EventoCard extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.5),
+                          color: Colors.white.withValues(alpha: 0.5),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
