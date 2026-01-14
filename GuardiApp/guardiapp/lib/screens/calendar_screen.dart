@@ -96,20 +96,7 @@ class _PantallaCalendarioState extends State<PantallaCalendario> {
                   itemCount: eventos.length,
                   itemBuilder: (context, index) {
                     final evento = eventos[index];
-                    return Card(
-                      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                      child: ListTile(
-                        leading: _getIconoTipo(evento.tipo),
-                        title: Text(evento.titulo, style: const TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: evento.descripcion != null 
-                            ? Text(evento.descripcion!) 
-                            : null,
-                        trailing: Text(
-                          DateFormat.Hm().format(evento.fecha), 
-                          style: const TextStyle(color: Colors.grey),
-                        ),
-                      ),
-                    );
+                    return _EventoCard(evento: evento);
                   },
                 );
               },
@@ -127,53 +114,235 @@ class _PantallaCalendarioState extends State<PantallaCalendario> {
     );
   }
 
-  Icon _getIconoTipo(TipoEvento tipo) {
-    switch (tipo) {
-      case TipoEvento.examen:
-        return const Icon(Icons.assignment, color: Colors.deepPurple);
-      case TipoEvento.reunion:
-        return const Icon(Icons.groups, color: Colors.indigo);
-      case TipoEvento.festivo:
-        return const Icon(Icons.celebration, color: Colors.pink);
-      case TipoEvento.tarea:
-        return const Icon(Icons.task, color: Colors.teal);
-    }
-  }
-
   void _mostrarDialogoAgregarEvento(BuildContext context) {
-    // Implementación básica para añadir evento rápido
     final controladorTitulo = TextEditingController();
-    
+    TimeOfDay horaSeleccionada = TimeOfDay.now();
+    TipoEvento tipoSeleccionado = TipoEvento.tarea;
+
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Nuevo Evento'),
-        content: TextField(
-          controller: controladorTitulo,
-          decoration: const InputDecoration(hintText: 'Título del evento'),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
-          ),
-          TextButton(
-            onPressed: () {
-              if (controladorTitulo.text.isNotEmpty) {
-                final nuevoEvento = EventoCalendario(
-                  id: DateTime.now().toString(),
-                  titulo: controladorTitulo.text,
-                  fecha: _diaSeleccionado, // Usa el día seleccionado en el calendario
-                  tipo: TipoEvento.tarea,
-                );
-                Provider.of<CalendarioProvider>(context, listen: false).agregarEvento(nuevoEvento);
-                Navigator.pop(context);
-              }
-            },
-            child: const Text('Guardar'),
-          ),
-        ],
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: const Text('Nuevo Evento'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: controladorTitulo,
+                  decoration: const InputDecoration(
+                    labelText: 'Título del evento',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<TipoEvento>(
+                  value: tipoSeleccionado,
+                  decoration: const InputDecoration(
+                    labelText: 'Tipo',
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  ),
+                  items: TipoEvento.values.map((TipoEvento tipo) {
+                    return DropdownMenuItem<TipoEvento>(
+                      value: tipo,
+                      child: Text(tipo.toString().split('.').last.toUpperCase()),
+                    );
+                  }).toList(),
+                  onChanged: (TipoEvento? newValue) {
+                    if (newValue != null) {
+                      setState(() {
+                        tipoSeleccionado = newValue;
+                      });
+                    }
+                  },
+                ),
+                const SizedBox(height: 16),
+                ListTile(
+                  title: Text('Hora: ${horaSeleccionada.format(context)}'),
+                  trailing: const Icon(Icons.access_time),
+                  shape: RoundedRectangleBorder(
+                    side: const BorderSide(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  onTap: () async {
+                    final picked = await showTimePicker(
+                      context: context,
+                      initialTime: horaSeleccionada,
+                    );
+                    if (picked != null) {
+                      setState(() {
+                        horaSeleccionada = picked;
+                      });
+                    }
+                  },
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancelar'),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.indigo,
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () {
+                  if (controladorTitulo.text.isNotEmpty) {
+                    // Combinamos la fecha seleccionada con la hora elegida
+                    final fechaEvento = DateTime(
+                      _diaSeleccionado.year,
+                      _diaSeleccionado.month,
+                      _diaSeleccionado.day,
+                      horaSeleccionada.hour,
+                      horaSeleccionada.minute,
+                    );
+
+                    final nuevoEvento = EventoCalendario(
+                      id: DateTime.now().toString(),
+                      titulo: controladorTitulo.text,
+                      fecha: fechaEvento,
+                      tipo: tipoSeleccionado,
+                    );
+                    Provider.of<CalendarioProvider>(context, listen: false).agregarEvento(nuevoEvento);
+                    Navigator.pop(context);
+                  }
+                },
+                child: const Text('Guardar'),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 }
+
+class _EventoCard extends StatelessWidget {
+  final EventoCalendario evento;
+
+  const _EventoCard({required this.evento});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = _getColoresEvento(evento.tipo);
+    final primaryColor = colors['primary']!;
+    final secondaryColor = colors['secondary']!;
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: secondaryColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border(
+          left: BorderSide(color: primaryColor, width: 6),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            // Aquí podríamos abrir detalles
+          },
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Hora
+                Column(
+                  children: [
+                    Text(
+                      DateFormat('HH:mm').format(evento.fecha),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: primaryColor,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      DateFormat('a').format(evento.fecha),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: primaryColor.withOpacity(0.8),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 16),
+                
+                // Contenido
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        evento.titulo,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      if (evento.descripcion != null) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          evento.descripcion!,
+                          style: const TextStyle(color: Colors.black54, fontSize: 13),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                      const SizedBox(height: 8),
+                      // Chip sencillo para el tipo
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          evento.tipo.toString().split('.').last.toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            color: primaryColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Map<String, Color> _getColoresEvento(TipoEvento tipo) {
+    switch (tipo) {
+      case TipoEvento.examen:
+        return {'primary': Colors.red, 'secondary': Colors.red.shade50};
+      case TipoEvento.reunion:
+        return {'primary': Colors.blue, 'secondary': Colors.blue.shade50};
+      case TipoEvento.festivo:
+        return {'primary': Colors.green, 'secondary': Colors.green.shade50};
+      case TipoEvento.tarea:
+        return {'primary': Colors.orange, 'secondary': Colors.orange.shade50};
+    }
+  }
+}
+
