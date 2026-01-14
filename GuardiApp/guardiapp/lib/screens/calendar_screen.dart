@@ -15,7 +15,7 @@ class PantallaCalendario extends StatefulWidget {
 class _PantallaCalendarioState extends State<PantallaCalendario> {
   DateTime _diaSeleccionado = DateTime.now();
   DateTime _diaEnFoco = DateTime.now();
-  // 1. CAMBIO: Forzamos el formato a SEMANA para estilo planning
+  //Forzamos el formato a SEMANA para estilo planning
   final CalendarFormat _formatoCalendario = CalendarFormat.week;
 
   @override
@@ -36,7 +36,7 @@ class _PantallaCalendarioState extends State<PantallaCalendario> {
                 lastDay: DateTime.utc(2030, 3, 14),
                 focusedDay: _diaEnFoco,
                 calendarFormat: _formatoCalendario,
-                // 2. CAMBIO: Eliminamos onFormatChanged para bloquear la vista
+                //Eliminamos onFormatChanged para bloquear la vista
                 selectedDayPredicate: (day) {
                   return isSameDay(_diaSeleccionado, day);
                 },
@@ -54,7 +54,7 @@ class _PantallaCalendarioState extends State<PantallaCalendario> {
                 },
                 calendarStyle: const CalendarStyle(
                   markersMaxCount: 1,
-                  // 3. CAMBIO: Estilos azules (Indigo) en lugar de naranja
+                  //CAMBIO: Estilos azules (Indigo) en lugar de naranja
                   markerDecoration: BoxDecoration(
                     color: Colors.indigo,
                     shape: BoxShape.circle,
